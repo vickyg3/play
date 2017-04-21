@@ -1,24 +1,24 @@
 class BadNeighbors:
-    def maxDonationsHelper(self, donations, first_included):
-        if not self.memo.has_key((tuple(donations), first_included)):
-            if len(donations) == 0:
+    def maxDonationsHelper(self, donations, i, first_included):
+        if not self.memo.has_key((i, first_included)):
+            if i == len(donations):
                 return 0
-            if len(donations) == 1:
-                return  donations[0] if not first_included else 0
+            if i == len(donations) - 1:
+                return  donations[i] if not first_included else 0
             # include current donation
             v1_first_included = first_included
-            if len(donations) == self.orig_len:
+            if i == 0:
                 v1_first_included = True
-            v1 = donations[0] + self.maxDonationsHelper(donations[2:], v1_first_included)
+            v1 = donations[i] + self.maxDonationsHelper(donations, i + 2, v1_first_included)
             # exclude current donation
-            v2 = self.maxDonationsHelper(donations[1:], first_included)
-            self.memo[(tuple(donations), first_included)] = max((v1, v2))
-        return self.memo[(tuple(donations), first_included)]
+            v2 = self.maxDonationsHelper(donations, i + 1, first_included)
+            self.memo[(i, first_included)] = max((v1, v2))
+        return self.memo[(i, first_included)]
 
     def maxDonations(self, donations):
         self.memo = {}
         self.orig_len = len(donations)
-        return self.maxDonationsHelper(donations, False)
+        return self.maxDonationsHelper(donations, 0, False)
 
 if __name__ == "__main__":
     print BadNeighbors().maxDonations([10, 3, 2, 5, 7, 8])
