@@ -15,4 +15,3 @@ if __name__ == "__main__":
   print VerySecureEncryption().encrypt("abcde", [4, 3, 2, 1, 0], 1)
   print VerySecureEncryption().encrypt("abcde", [4, 3, 2, 1, 0], 2)
   print VerySecureEncryption().encrypt("uogcodlk", [4, 3, 6, 2, 5, 1, 0, 7], 44)
-  
