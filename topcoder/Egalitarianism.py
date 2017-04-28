@@ -1,22 +1,31 @@
-INT_MAX = 999999999999
+import sys
+INT_MAX = sys.maxint
 
 class Egalitarianism:
 	def maxDifference(self, isFriend, d):
 		graph = []
 		for person in isFriend:
-			graph.append([1 if x == 'Y' else INT_MAX for x in person])
+			graph.append([i for i, x in enumerate(person) if x == 'Y'])
+		max_shortest = -1
 		n = len(isFriend)
+		# for each node, find shortest path to all other nodes
 		for i in range(n):
-			for j in range(n):
-				for k in range(n):
-					graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
-		max_depth = 0
-		for i in range(n):
-			for j in range(i):
-				if graph[i][j] >= INT_MAX: # disconnected graph
-					return -1
-				max_depth = max(max_depth, graph[i][j])
-		return max_depth * d
+			shortest = [INT_MAX] * n
+			visited = [False] * n
+			# perform bfs starting from i
+			queue = [(i, 0)]
+			while queue:
+				item, distance = queue.pop(0)
+				visited[item] = True
+				shortest[item] = distance
+				for neigbor in graph[item]:
+					if not visited[neigbor] and neigbor not in [x[0] for x in queue]:
+						queue.append((neigbor, distance + 1))
+			if False in visited: # disconnected graph
+				return -1
+			shortest.append(max_shortest)
+			max_shortest = max(shortest)
+		return max_shortest * d
 
 if __name__ == "__main__":
 	print Egalitarianism().maxDifference(["NYN", "YNY", "NYN"], 10)
